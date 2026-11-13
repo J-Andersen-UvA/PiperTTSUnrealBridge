@@ -21,11 +21,12 @@ Create a `PiperVoiceProfile` Data Asset and set:
 For `nl_NL-alex-medium`, use `noiseScale = 0.5` and
 `noiseWidthScale = 0.333`. These are the values in the voice's model card.
 
-For the locally built Piper checkout, the runtime and eSpeak paths are:
+For a Piper checkout built with the commands below, the runtime and eSpeak
+paths are:
 
 ```text
-C:/Users/VICON/Desktop/Code/piper1-gpl/libpiper/install-ue57/bin
-C:/Users/VICON/Desktop/Code/piper1-gpl/libpiper/install-ue57/share/espeak-ng-data
+<piper-checkout>/libpiper/install-ue57/bin
+<piper-checkout>/libpiper/install-ue57/share/espeak-ng-data
 ```
 
 ## Blueprint
@@ -36,7 +37,7 @@ In an Editor Utility Widget, connect the returned `Audio` value to `Preview
 Piper Audio`. The preview node plays through Unreal's editor audio device and
 does not require PIE or a saved Sound Wave asset.
 
-Synthesis is synchronous in this first version. Short words and phrases are the intended use. An asynchronous node can be added when the FaceCorrection timeline integration starts.
+Synthesis is synchronous. Short words and phrases are the intended use.
 
 ## Piper
 
