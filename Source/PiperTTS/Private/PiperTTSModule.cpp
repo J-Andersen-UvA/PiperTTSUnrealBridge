@@ -113,31 +113,32 @@ FPiperSynthesisResult FPiperTTSModule::synthesize(
     {
         FPiperNativeAudioChunk chunk{};
         const int32 status = nativeApi->next(synthesizer->handle, &chunk);
-        if (status == piperDone)
-        {
-            break;
-        }
-        if (status != piperOk)
+        if (status != piperOk && status != piperDone)
         {
             result.audio = FPiperAudioData();
             result.errorMessage = TEXT("Piper failed while generating audio.");
             return result;
         }
-        if (chunk.samples == nullptr || chunk.sampleCount == 0 || chunk.sampleRate <= 0)
+        if (chunk.samples != nullptr && chunk.sampleCount > 0 && chunk.sampleRate > 0)
         {
-            continue;
+            if (result.audio.sampleRate == 0)
+            {
+                result.audio.sampleRate = chunk.sampleRate;
+            }
+            else if (result.audio.sampleRate != chunk.sampleRate)
+            {
+                result.audio = FPiperAudioData();
+                result.errorMessage = TEXT("Piper returned inconsistent sample rates.");
+                return result;
+            }
+            result.audio.samples.Append(
+                chunk.samples,
+                static_cast<int32>(chunk.sampleCount));
         }
-        if (result.audio.sampleRate == 0)
+        if (status == piperDone)
         {
-            result.audio.sampleRate = chunk.sampleRate;
+            break;
         }
-        else if (result.audio.sampleRate != chunk.sampleRate)
-        {
-            result.audio = FPiperAudioData();
-            result.errorMessage = TEXT("Piper returned inconsistent sample rates.");
-            return result;
-        }
-        result.audio.samples.Append(chunk.samples, static_cast<int32>(chunk.sampleCount));
     }
 
     result.success = result.audio.isValid();

@@ -36,7 +36,7 @@ bool FPiperTTSSynthesisTest::RunTest(const FString& parameters)
 
     const FPiperSynthesisResult result =
         UPiperBlueprintLibrary::synthesizeSpeech(
-            TEXT("Hallo wereld. Dit is een Nederlandse test."),
+            TEXT("Hallo"),
             profile);
 
     TestTrue(*result.errorMessage, result.success);
