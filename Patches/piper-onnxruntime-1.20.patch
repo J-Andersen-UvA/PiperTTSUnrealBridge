@@ -1,0 +1,26 @@
+diff --git a/libpiper/src/piper.cpp b/libpiper/src/piper.cpp
+index e78a1a2..52e9c51 100644
+--- a/libpiper/src/piper.cpp
++++ b/libpiper/src/piper.cpp
+@@ -67,0 +68,12 @@ static auto default_intra_op_threads() -> int {
++static auto get_output_names(const Ort::Session &session)
++    -> std::vector<std::string> {
++  Ort::AllocatorWithDefaultOptions allocator;
++  std::vector<std::string> output_names;
++  output_names.reserve(session.GetOutputCount());
++  for (std::size_t index = 0; index < session.GetOutputCount(); ++index) {
++    auto name = session.GetOutputNameAllocated(index, allocator);
++    output_names.emplace_back(name.get());
++  }
++  return output_names;
++}
++
+@@ -915 +927 @@ stream_encode_next_sentence(struct piper_synthesizer *synth,
+-      synth->encoder_session->GetOutputNames();
++      get_output_names(*synth->encoder_session);
+@@ -1058 +1070 @@ static auto synthesize_next_streaming(struct piper_synthesizer *synth,
+-      synth->decoder_session->GetOutputNames();
++      get_output_names(*synth->decoder_session);
+@@ -1176 +1188 @@ auto piper_synthesize_next(struct piper_synthesizer *synth,
+-  std::vector<std::string> output_names_strs = synth->session->GetOutputNames();
++  std::vector<std::string> output_names_strs = get_output_names(*synth->session);

@@ -1,0 +1,20 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "0.1.0",
+  "FriendlyName": "Piper TTS",
+  "Description": "Minimal Unreal Engine and Blueprint bridge for local Piper text-to-speech synthesis.",
+  "Category": "Audio",
+  "CreatedBy": "VICON",
+  "CanContainContent": true,
+  "IsBetaVersion": true,
+  "Installed": false,
+  "EnabledByDefault": true,
+  "Modules": [
+    {
+      "Name": "PiperTTS",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}

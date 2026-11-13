@@ -1,0 +1,9 @@
+Binaries/
+Intermediate/
+Saved/
+.vs/
+*.sln
+*.suo
+*.user
+Content/Voices/
+LocalModels/
