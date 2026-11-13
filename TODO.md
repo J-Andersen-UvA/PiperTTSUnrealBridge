@@ -7,6 +7,7 @@
 - [x] Download and configure the `nl_NL-alex-medium` voice locally.
 - [x] Verify Dutch synthesis with the built Piper runtime.
 - [x] Verify Dutch synthesis through the Unreal bridge.
+- [x] Add Editor Utility Widget audio preview.
 - [ ] Add an asynchronous Blueprint node.
 - [ ] Expose phoneme alignments when FaceCorrection needs them.
 - [x] Add an environment-configured Unreal synthesis test.

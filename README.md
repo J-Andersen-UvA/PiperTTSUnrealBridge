@@ -32,6 +32,10 @@ C:/Users/VICON/Desktop/Code/piper1-gpl/libpiper/install-ue57/share/espeak-ng-dat
 
 Use `Synthesize Speech` with the input text and profile asset. The first request for a profile loads its voice model. The synthesizer is cached for later requests.
 
+In an Editor Utility Widget, connect the returned `Audio` value to `Preview
+Piper Audio`. The preview node plays through Unreal's editor audio device and
+does not require PIE or a saved Sound Wave asset.
+
 Synthesis is synchronous in this first version. Short words and phrases are the intended use. An asynchronous node can be added when the FaceCorrection timeline integration starts.
 
 ## Piper

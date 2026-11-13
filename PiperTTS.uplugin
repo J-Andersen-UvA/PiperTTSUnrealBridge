@@ -15,6 +15,11 @@
       "Name": "PiperTTS",
       "Type": "Runtime",
       "LoadingPhase": "Default"
+    },
+    {
+      "Name": "PiperTTSEditor",
+      "Type": "Editor",
+      "LoadingPhase": "Default"
     }
   ]
 }
