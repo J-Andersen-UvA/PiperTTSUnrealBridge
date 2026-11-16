@@ -43,6 +43,13 @@ bool FPiperTTSSynthesisTest::RunTest(const FString& parameters)
     TestEqual(TEXT("Sample rate"), result.audio.sampleRate, 22050);
     TestTrue(TEXT("Generated samples"), !result.audio.samples.IsEmpty());
     TestTrue(TEXT("Positive duration"), result.audio.getDurationSeconds() > 0.0f);
+
+    FString error;
+    const FString phonemes = UPiperBlueprintLibrary::textToPhonemes(TEXT("verven"), profile, error);
+    TestTrue(*error, error.IsEmpty());
+    AddInfo(FString::Printf(TEXT("Dutch Alex phonemes for verven = %s"), *phonemes));
+    TestTrue(TEXT("Dutch phoneme string contains a non-ASCII vowel"), phonemes.Contains(TEXT("\u025B")));
+    TestFalse(TEXT("No model boundary tokens"), phonemes.Contains(TEXT("^")) || phonemes.Contains(TEXT("$")));
     return true;
 }
 

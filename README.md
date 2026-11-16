@@ -64,3 +64,11 @@ build. The patch uses the equivalent API available in ONNX Runtime 1.20.
 ```text
 git apply --unidiff-zero /path/to/PiperTTS/Patches/piper-onnxruntime-1.20.patch
 ```
+
+## Text to phonemes
+
+Call `Text to Phonemes` with text and the same Piper voice profile used for speech.
+The node returns the voice's phoneme string and an error message if extraction fails.
+For eSpeak voices such as Dutch Alex, the symbols are IPA-style. The node uses
+Piper's synthesis chunks and returns only the phoneme string. It does not expose
+phoneme timing.

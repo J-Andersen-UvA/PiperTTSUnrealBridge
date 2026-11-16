@@ -69,9 +69,15 @@ void FPiperTTSModule::ShutdownModule()
 
 FPiperSynthesisResult FPiperTTSModule::synthesize(
     const FString& text,
-    const UPiperVoiceProfile& profile)
+    const UPiperVoiceProfile& profile,
+    FString* phonemes)
 {
     FPiperSynthesisResult result;
+    if (phonemes)
+    {
+        phonemes->Reset();
+    }
+    bool hasAudio = false;
     if (text.TrimStartAndEnd().IsEmpty())
     {
         result.errorMessage = TEXT("Text is empty.");
@@ -119,6 +125,36 @@ FPiperSynthesisResult FPiperTTSModule::synthesize(
             result.errorMessage = TEXT("Piper failed while generating audio.");
             return result;
         }
+        if (phonemes && chunk.phonemes)
+        {
+            FString sentence;
+            bool atGroupStart = true;
+            for (SIZE_T index = 0; index < chunk.phonemeCount; ++index)
+            {
+                const char32_t codepoint = chunk.phonemes[index];
+                if (codepoint == 0)
+                {
+                    atGroupStart = true;
+                    continue;
+                }
+                if (atGroupStart && codepoint != U'^' && codepoint != U'$')
+                {
+                    const UTF32CHAR point = static_cast<UTF32CHAR>(codepoint);
+                    const FUTF32ToTCHAR converted(&point, 1);
+                    sentence.AppendChars(converted.Get(), converted.Length());
+                }
+                atGroupStart = false;
+            }
+            sentence.TrimStartAndEndInline();
+            if (!sentence.IsEmpty())
+            {
+                if (!phonemes->IsEmpty())
+                {
+                    phonemes->AppendChar(TEXT(' '));
+                }
+                *phonemes += sentence;
+            }
+        }
         if (chunk.samples != nullptr && chunk.sampleCount > 0 && chunk.sampleRate > 0)
         {
             if (result.audio.sampleRate == 0)
@@ -131,9 +167,13 @@ FPiperSynthesisResult FPiperTTSModule::synthesize(
                 result.errorMessage = TEXT("Piper returned inconsistent sample rates.");
                 return result;
             }
-            result.audio.samples.Append(
-                chunk.samples,
-                static_cast<int32>(chunk.sampleCount));
+            hasAudio = true;
+            if (!phonemes)
+            {
+                result.audio.samples.Append(
+                    chunk.samples,
+                    static_cast<int32>(chunk.sampleCount));
+            }
         }
         if (status == piperDone)
         {
@@ -141,7 +181,7 @@ FPiperSynthesisResult FPiperTTSModule::synthesize(
         }
     }
 
-    result.success = result.audio.isValid();
+    result.success = phonemes ? hasAudio : result.audio.isValid();
     if (!result.success)
     {
         result.errorMessage = TEXT("Piper returned no audio samples.");

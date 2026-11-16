@@ -12,7 +12,7 @@ public:
 
     FPiperSynthesisResult synthesize(
         const FString& text,
-        const UPiperVoiceProfile& profile);
+        const UPiperVoiceProfile& profile, FString* phonemes = nullptr);
 
 private:
     struct FNativeApi;

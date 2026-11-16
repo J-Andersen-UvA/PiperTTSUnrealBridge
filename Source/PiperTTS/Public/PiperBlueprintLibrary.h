@@ -16,6 +16,9 @@ public:
         const FString& text,
         const UPiperVoiceProfile* profile);
 
+    UFUNCTION(BlueprintCallable, Category = "Piper TTS", meta = (DisplayName = "Text to Phonemes"))
+    static FString textToPhonemes(const FString& text, const UPiperVoiceProfile* profile, FString& errorMessage);
+
     UFUNCTION(BlueprintPure, Category = "Piper TTS", meta = (DisplayName = "Get Piper Audio Duration"))
     static float getAudioDuration(const FPiperAudioData& audio);
 };
